@@ -86,6 +86,28 @@ pnpm biome format: Formatea el código automáticamente.
 
 pnpm biome lint: Realiza análisis estático para mejorar la calidad del código.
 
+### TanStack Query
+
+Uso de TanStack Query en Next.js 15
+¿Qué es TanStack Query?
+TanStack Query es una librería de gestión de estado asíncrono para aplicaciones React. Simplifica la obtención, almacenamiento en caché, sincronización y actualización de datos en tu aplicación. Es especialmente útil para manejar peticiones a APIs, ya que proporciona herramientas para gestionar el estado de carga, errores y datos de manera eficiente.
+
+¿Por qué usar TanStack Query en Next.js 15?
+Simplifica la gestión de datos: TanStack Query elimina la necesidad de escribir código repetitivo para manejar peticiones HTTP, almacenamiento en caché y actualización de datos.
+
+Caché inteligente: Almacena automáticamente los datos en caché y los sincroniza en segundo plano, mejorando el rendimiento y la experiencia del usuario.
+
+Integración con Server-Side Rendering (SSR) y Static Site Generation (SSG): TanStack Query funciona perfectamente con las características de renderizado del lado del servidor de Next.js, permitiendo pre-fetching de datos y sincronización entre el servidor y el cliente.
+
+DevTools integradas: Proporciona herramientas de desarrollo para depurar y visualizar el estado de las consultas.
+
+Mejora la productividad: Reduce la complejidad del código y permite centrarse en la lógica de negocio en lugar de la gestión de estados asíncronos.
+
+¿Qué ventajas aporta en comparación con otras soluciones?
+Comparado con useEffect + fetch: TanStack Query maneja automáticamente la caché, la revalidación de datos y el estado de carga, evitando la necesidad de escribir lógica manual.
+
+Comparado con Redux o Zustand: TanStack Query está específicamente diseñado para manejar datos asíncronos, mientras que Redux y Zustand son más adecuados para el estado global de la aplicación.
+
 * Instalación
 Clona este repositorio:
 git clone <https://github.com/orlando0107/frontend.git>

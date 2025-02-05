@@ -6,6 +6,7 @@ import { Flex, Theme, ThemePanel } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { SessionProvider } from "next-auth/react";
 import Footer from "@/components/layout/Foother";
+import ProvidersTanstack from "@/context/ProvidersTanstack";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,12 +32,14 @@ export default function RootLayout({
     <html lang="en">
       <SessionProvider>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <ProvidersTanstack>
           <Theme accentColor="violet" radius="small">
             <Flex direction={"column"} height={"100vh"}>
               {children}
               <Footer />
             </Flex>
           </Theme>
+          </ProvidersTanstack>
         </body>
       </SessionProvider>
     </html>

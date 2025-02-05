@@ -29,8 +29,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async session({ session, token }) {
       session.user.id = token.id as string;
-      session.user.email = token.email as string;;
-      session.user.role = token.role as string;;
+      session.user.email = token.email as string;
+      session.user.role = token.role as string;
       session.user.name = token.name ?? "";
       session.user.image =
         typeof token.image === "string" ? token.image : undefined;
@@ -40,6 +40,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   session: {
     strategy: "jwt",
+  },
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/",
+    newUser:"/dashboard",
+    error: "/error",
   },
 
   secret: process.env.NEXTAUTH_SECRET as string,
