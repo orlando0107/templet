@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 
 export default function SignInGoogle() {
     return (
-        <div className="px-6 sm:px-0 max-w-sm flex flex-col space-y-4 justify-center items-center">
+        <div className="flex flex-col justify-center items-center">
             <Button
                 variant="soft"
                 onClick={() => signIn("google", { callbackUrl: "/" })}

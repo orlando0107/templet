@@ -20,7 +20,7 @@ export function SignInEmail() {
   };
 
   return (
-    <div className="px-6 sm:px-0 max-w-sm flex flex-col space-y-4 justify-items-center">
+    <div className=" flex flex-col space-y-4 justify-items-center">
       <Input
         type="email"
         value={email}

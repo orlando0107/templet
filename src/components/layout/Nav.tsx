@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import React from 'react'
 import MyButtonClient from '../common/client/button';
-import { Flex } from '@radix-ui/themes';
+import { Flex, Skeleton } from '@radix-ui/themes';
 import { ButtonOut } from '../common/client/buttonOut';
 
 export default function Nav() {
@@ -13,8 +13,7 @@ export default function Nav() {
     if (status === 'loading') {
         return (
             <Flex gap={"4"} justify={"center"} align={"center"}>
-                {/* Mostrar algo mientras se carga la sesión */}
-                Cargando...
+                <Skeleton>Loading</Skeleton>
             </Flex>
         );
     }
