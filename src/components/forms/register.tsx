@@ -1,12 +1,13 @@
 'use client';
 
-import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/common/client/input";
 import { SubmitButton } from "@/components/common/client/SumitButton";
 import { Label } from '@/components/common/client/label';
+import SignInGoogle from "../common/client/buttonGoogle";
+import { SignInEmail } from "../common/client/buttonEmail";
 
 // Esquema de validación con Zod
 const registerSchema = z.object({
@@ -35,32 +36,48 @@ export const RegisterForm: React.FC = () => {
   };
 
   return (
+    <div className="w-full max-w-md mx-aut justify-center-items">
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-4">
       <div>
         <Label htmlFor="name">Nombre</Label>
-        <Input value={"name"} id="name" type="text" {...register("name")} />
+        <Input className='read-only:bg-gray-100 valid:border-blue-500 ...' id="name" type="text" {...register("name")} />
         {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
       </div>
 
       <div>
         <Label htmlFor="email">Email</Label>
-        <Input value={"email"} id="email" type="email" {...register("email")} />
+        <Input  className='read-only:bg-gray-100 valid:border-blue-500 ...' id="email" type="email" {...register("email")} />
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
       <div>
         <Label htmlFor="password">Contraseña</Label>
-        <Input value={"password"} id="password" type="password" {...register("password")} />
+        <Input  className='read-only:bg-gray-100 valid:border-blue-500 ...' id="password" type="password" {...register("password")} />
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
       </div>
 
       <div>
         <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
-        <Input value={"confirmPassword"} id="confirmPassword" type="password" {...register("confirmPassword")} />
-        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+        <Input  className='read-only:bg-gray-100 valid:border-blue-500 ...' id="confirmPassword" type="password" {...register("confirmPassword")} />
+        {errors.confirmPassword && <p className="text-red-500 text-sm ">{errors.confirmPassword.message}</p>}
       </div>
 
       <SubmitButton text="Registrarse" />
     </form>
+    {/* Separador visual */}
+      {/* 🌟 Separador */}
+      <div className="flex items-center my-6 justify-items-center justify-center">
+        <span>-----------</span>
+        <span className="mx-4 text-gray-500 text-sm">O inicia sesión con</span>
+        <span>-----------</span>
+      </div>
+
+      {/* 🔑 Opciones de inicio de sesión */}
+      <div className="flex flex-col gap-3">
+        <SignInGoogle />
+        <SignInEmail />
+      </div>
+    </div>
+    
   );
 };

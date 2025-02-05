@@ -1,50 +1,46 @@
-import Nodemailer from 'next-auth/providers/nodemailer';
-import Google from 'next-auth/providers/google';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from './db/ConnectPrisma';
-import NextAuth, { Role } from 'next-auth';
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import NextAuth from "next-auth";
 export type {
   Account,
   DefaultSession,
   Profile,
   Session,
   User,
-} from '@auth/core/types';
-import 'next-auth/jwt';
+} from "@auth/core/types";
+import "next-auth/jwt";
+import { authProviders } from "@/lib/providers";
+import { prisma } from "./db/connection";
+
+const conection = prisma
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    Google,
-    Nodemailer({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
-    }),
-  ],
+  adapter: PrismaAdapter(conection),
+  providers: authProviders,
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.role = user.role;
+        token.role = user.role ?? "user";
       }
       return token;
     },
+
     async session({ session, token }) {
       session.user.id = token.id as string;
-      session.user.email = token.email as string;
-      session.user.role = (token.role as Role[]) || [];
-      session.user.name = token.name as string;
-      session.user.image = typeof token.image === 'string' ? token.image : undefined;
+      session.user.email = token.email as string;;
+      session.user.role = token.role as string;;
+      session.user.name = token.name ?? "";
+      session.user.image =
+        typeof token.image === "string" ? token.image : undefined;
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET!,
+
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
-  pages: {
-    signIn: '/auth/login', // Página personalizada de inicio de sesión
-    error: '/error', // Página personalizada de errores
-  },
+
+  secret: process.env.NEXTAUTH_SECRET as string,
 });

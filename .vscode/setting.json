@@ -1,0 +1,4 @@
+{
+  "editor.defaultFormatter": "biome.biome",
+  "editor.formatOnSave": true
+}

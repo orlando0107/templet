@@ -78,12 +78,20 @@ Configuración Global
 -prisma studio: Inicia Prisma Studio, una herramienta gráfica para gestionar la base de datos.
 -prisma db push: Aplica los cambios de esquema sin migraciones.
 
+Formateo y Linting con Biome:
+
+pnpm biome check: Verifica errores en el código.
+
+pnpm biome format: Formatea el código automáticamente.
+
+pnpm biome lint: Realiza análisis estático para mejorar la calidad del código.
+
 * Instalación
 Clona este repositorio:
-git clone <https://github.com/tuusuario/tu-proyecto.git>
+git clone <https://github.com/orlando0107/frontend.git>
 
-cd tu-proyecto
-Instala las dependencias usando bun:
+cd frontend
+Instala las dependencias usando pnpm:
 
 pnpm install
 Para iniciar el servidor de desarrollo:
