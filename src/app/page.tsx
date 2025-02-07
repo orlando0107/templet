@@ -1,14 +1,13 @@
-import PublicHeader from "@/components/layout/PublicHEader";
-import { Flex } from "@radix-ui/themes";
+import LayoutPublic from "@/components/layout/layout";
+
 
 
 export default function Home() {
   return (
     <>
-      <PublicHeader />
-      <Flex direction={"column"} height={"100vh"} gap={"2"} p={"2"}>
-        <h1 className="text-2xl font-bold">Temple en construccion ...</h1>
-      </Flex>
+      <LayoutPublic>
+        <h1>My Temeple</h1>
+      </LayoutPublic>
     </>
   );
 }

@@ -1,17 +1,21 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
 	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false,
+    "defaultBranch": "main"
+},
 	"files": {
 		"ignoreUnknown": false,
 		"ignore": []
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "space"
+		"indentStyle": "space",
+		"formatWithErrors": true,
+		"attributePosition":"auto",
+		"bracketSpacing":true
 		
 	},
 	"organizeImports": {

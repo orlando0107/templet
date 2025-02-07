@@ -26,6 +26,6 @@
     "next-env.d.ts", 
     "**/*.ts", 
     "**/*.tsx", 
-    ".next/types/**/*.ts"],
+    ".next/types/**/*.ts", "src/app/auth/verify-email", "src/app/api/auth/verify-email"],
   "exclude": ["node_modules"]
 }

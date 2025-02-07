@@ -12,6 +12,7 @@ model User {
   name          String?
   email         String          @unique
   emailVerified DateTime?
+  verifiedEmail Boolean @default(false)
   password      String?
   image         String?
   role          Role            @default(USER)
@@ -20,6 +21,10 @@ model User {
   accounts      Account[]
   Authenticator Authenticator[]
   sessions      Session[]
+  temporaryTokens TemporaryToken[]
+  deviceLogins    DeviceLogin[]
+  failedAttempts  FailedAttempt[]
+  securityEvents  SecurityEvent[]
 }
 
 model Account {
@@ -58,6 +63,56 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
+model TemporaryToken {
+  id         String   @id @default(cuid())
+  userId     String
+  token      String   @unique
+  type       String   // activation, password_reset, security_check, etc.
+  attempts   Int      @default(0) // Número de intentos fallidos permitidos antes de invalidar
+  ipAddress  String?  // Para rastrear la IP del usuario
+  userAgent  String?  // Para saber desde qué dispositivo se generó
+  expires    DateTime
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DeviceLogin {
+  id          String   @id @default(cuid())
+  userId      String
+  deviceInfo  String   // Información del dispositivo (modelo, SO, navegador)
+  ipAddress   String?  // IP desde donde se hizo el login
+  location    String?  // Ubicación aproximada
+  lastLoginAt DateTime @default(now())
+  expiresAt   DateTime?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FailedAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  ipAddress   String?  // IP del intento fallido
+  userAgent   String?  // Desde qué dispositivo se intentó
+  reason      String   // Motivo del fallo (contraseña incorrecta, usuario no encontrado, etc.)
+  attemptAt   DateTime @default(now())
+  status      String // Opcional: "LOCKED", "WARNING", etc.
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SecurityEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  eventType   String   // "password_changed", "email_verified", "suspicious_login"
+  description String?  // Información adicional del evento
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -76,3 +131,7 @@ enum Role {
   ADMIN
   USER
 }
+
+// DeviceLogin → Guarda información sobre el dispositivo desde donde se inició sesión.
+// FailedAttempt → Registra intentos fallidos de inicio de sesión con IP, dispositivo y motivo.
+// SecurityEvent → Guarda eventos de seguridad importantes para rastrear actividad sospechosa.

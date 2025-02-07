@@ -10,7 +10,8 @@ import { SignInEmail } from "../common/client/buttonEmail";
 import { Box, Text } from "@radix-ui/themes";
 import { useRegisterUser } from "@/services/register";
 import { registerSchema } from "@/schema/myZods";
-import type {z} from 'zod'
+import type {z} from 'zod';
+import { useState } from "react";
 
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -26,20 +27,32 @@ export const RegisterForm: React.FC = () => {
     resolver: zodResolver(registerSchema),
   });
 
+  // Estado del modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+
   const onSubmit = (data: RegisterFormData) => {
-    registerUser(data);
+    registerUser(data, {
+      onSuccess: () => {
+        setModalTitle("Registro exitoso");
+        setModalMessage("Hemos enviado un enlace de verificación a tu correo.");
+        setModalOpen(true);
+      },
+      onError: (err) => {
+        setModalTitle("Error en el registro");
+        setModalMessage(err.message || "Ocurrió un problema, intenta nuevamente.");
+        setModalOpen(true);
+      },
+    });
   };
 
   return (
     <div className="w-full max-w-md mx-auto justify-center-items">
-      {/* 📌 Título */}
       <div className="justify-items-center m-2 text-center font-bold">
         <Text>Registrate</Text>
       </div>
-
-      {/* 📌 Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-4">
-        {/* Nombre */}
         <div>
           <Label htmlFor="name">Nombre</Label>
           <Input className="read-only:bg-gray-100 valid:border-blue-500 ..." id="name" type="text" {...register("name")} />
@@ -85,6 +98,13 @@ export const RegisterForm: React.FC = () => {
           <SignInEmail />
         </Box>
       </div>
+      <ModalDialog
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={modalTitle}
+        message={modalMessage}
+        autoClose={5000} // Se cierra en 5 segundos automáticamente
+      />
     </div>
   );
 };

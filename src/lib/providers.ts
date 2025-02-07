@@ -1,10 +1,12 @@
 import Credentials from "next-auth/providers/credentials";
 import Nodemailer from "next-auth/providers/nodemailer";
-import { verifyPassword } from "@/lib/bcrypt";
 import { sendVerificationRequest } from "@/lib/sendVerificationRequest";
 import type { User } from "next-auth";
 import Google from "next-auth/providers/google";
 import { prisma } from "@/db/connection";
+import * as argon2 from "argon2";
+import { MyEnvs } from "./envs";
+
 
 export const authProviders = [
   Google,
@@ -37,9 +39,10 @@ export const authProviders = [
 
         if (!user) return null;
 
-        const isValid = await verifyPassword(
+        const isValid = await argon2.verify(
+          user.password as string,
           credentials.password as string,
-          user.password as string
+          {secret:Buffer.from(MyEnvs.SECRET_PASSWORD)}
         );
         if (!isValid) return null;
 
