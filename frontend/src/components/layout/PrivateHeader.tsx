@@ -1,26 +1,34 @@
-import React from 'react'
-
-// src/components/layout/PrivateHeader.tsx
-import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+"use client";
+import React from "react";
+import { useSession } from "next-auth/react";
+import { Flex, Link, Skeleton } from "@radix-ui/themes";
+import { Mymenu } from "@/components/dropdown/menu";
 
 export default function PrivateHeader() {
-    const { data: session } = useSession();
-
-    if(session){
-        return (
-        <header className="bg-green-500 text-white p-4">
-            <nav className="container mx-auto flex justify-between items-center">
-                <Link href="/dashboard" className="text-xl font-bold">
-                    Dashboard
-                </Link>
-                <div>
-                    <button onClick={() => signOut()} className="bg-red-500 px-4 py-2 rounded">
-                        Cerrar sesión
-                    </button>
-                </div>
-            </nav>
-        </header>
-    );
-    }
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const { data: session, status } = useSession();
+	if (status === "loading") {
+		return <Skeleton>Loading</Skeleton>;
+	}
+	if (status === "authenticated") {
+		return (
+			<Flex
+				justify="between"
+				align="center"
+				p="4"
+				style={{ borderBottom: "0.5px solid var(--gray-a5)" }}
+			>
+				<Link
+					href="/"
+					size="4"
+					weight="bold"
+					style={{ textDecoration: "none" }}
+				>
+					Mi App
+				</Link>
+				<Mymenu />
+			</Flex>
+		);
+	}
+	return null;
 }
