@@ -5,3 +5,8 @@ export interface RegisterResponse {
     email: string;
   };
 }
+
+export interface GenericoResponse<T> {
+  data: T;
+  message: string;
+}

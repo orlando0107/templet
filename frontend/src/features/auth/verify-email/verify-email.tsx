@@ -1,45 +1,28 @@
-'use client'
-
-import { useEffect, useState } from "react";
+"use client";
+import { Flex, Text } from "@radix-ui/themes";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useActivarEmail } from "@/services/activarEmail";
 
 interface Props {
-    token: string;
+  token: string;
 }
-
 export const VerifyEmail = ({ token }: Props) => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<boolean | null>(null);
+  const router = useRouter();
+  const { data, status } = useActivarEmail(token);
 
-    useEffect(() => {
-        const verifyToken = async () => {
-            if (!token) return;
+  useEffect(() => {
+    if (status === "success" && data) {
+      console.log("Usuario verificado:", data);
+      router.push("/auth/login"); // Redirige al login
+    }
+  }, [status, data, router]);
 
-            try {
-                const res = await fetch(`/api/auth/verify-email?token=${token}`);
-                const data = await res.json();
-
-                if (res.ok) {
-                    setSuccess(true);
-                } else {
-                    setError(data.message || "Error desconocido");
-                }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error) {
-                setError("Hubo un error al verificar el email.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        verifyToken();
-    }, [token]);
-
-    return (
-        <div>
-            {loading && <p>Cargando...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {success && <p>¡Tu cuenta ha sido verificada correctamente!</p>}
-        </div>
-    );
+  return (
+    <Flex justify="center" align="center" m="2" p="2">
+      {status === "pending" && <Text>Cargando...</Text>}
+      {status === "error" && <Text color="red">El enlace ha expirado o es inválido.</Text>}
+      {status === "success" && <Text>Cuenta verificada. Redirigiendo...</Text>}
+    </Flex>
+  );
 };

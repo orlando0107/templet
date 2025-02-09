@@ -104,7 +104,7 @@ export const RegisterForm: React.FC = () => {
         onClose={() => setModalOpen(false)}
         title={modalTitle}
         message={modalMessage}
-        autoClose={5000} // Se cierra en 5 segundos automáticamente
+        autoClose={30000} // Se cierra en 5 segundos automáticamente
       />
     </div>
   );

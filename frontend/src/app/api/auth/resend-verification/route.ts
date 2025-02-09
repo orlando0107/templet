@@ -1,6 +1,7 @@
 import { prisma } from "@/db/connection";
 import { type NextRequest, NextResponse } from "next/server";
 import { MyEnvs } from "@/lib/envs";
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 import crypto from "crypto";
 import argon2 from "argon2";
 import { sendEmail } from "@/lib/mailer";

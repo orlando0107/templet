@@ -3,3 +3,7 @@ export interface RegisterFormData {
   email: string;
   password: string;
 }
+
+export interface ActivaEmailFormData {
+  token:string;
+}
