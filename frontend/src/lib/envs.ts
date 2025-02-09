@@ -1,7 +1,7 @@
 export const MyEnvs = {
   NODE_ENV: process.env.NODE_ENV,
-  BACKEND: process.env.NEXT_PUBLIC_API_URL,
-  NEXTJS: process.env.NEXT_PUBLIC_APP_URL,
+  BACKEND: process.env.NEXT_PUBLIC_API_URL as string,
+  NEXTJS: process.env.NEXT_PUBLIC_APP_URL as string,
   AUTH_SECRET: process.env.AUTH_SECRET,
   AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
   AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
@@ -15,3 +15,4 @@ export const MyEnvs = {
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 };
 
+console.log("Variables de Entorno", MyEnvs.NODE_ENV)

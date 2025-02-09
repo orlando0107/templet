@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import argon2 from "argon2";
 import { MyEnvs } from "@/lib/envs";
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 import crypto from "crypto";
 import { sendEmail } from "@/lib/mailer";
 import { getIp } from "@/lib/getIp";

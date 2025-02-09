@@ -9,7 +9,7 @@ export function useRegisterUser() {
       console.log("Usuario registrado:", data);
     },
     onError: (error) => {
-      console.error("Error en el registro:", error);
+      console.log("Error en el registro:", error);
     },
   });
 }

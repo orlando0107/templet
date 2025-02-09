@@ -10,8 +10,9 @@ import { SignInEmail } from "../common/client/buttonEmail";
 import { Box, Text } from "@radix-ui/themes";
 import { useRegisterUser } from "@/services/register";
 import { registerSchema } from "@/schema/myZods";
-import type {z} from 'zod';
+import type {z} from "zod";
 import { useState } from "react";
+import { ModalDialog } from "../modals/modalDialog";
 
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -39,9 +40,9 @@ export const RegisterForm: React.FC = () => {
         setModalMessage("Hemos enviado un enlace de verificación a tu correo.");
         setModalOpen(true);
       },
-      onError: (err) => {
+      onError: (error) => {
         setModalTitle("Error en el registro");
-        setModalMessage(err.message || "Ocurrió un problema, intenta nuevamente.");
+        setModalMessage((error as Error).message || "Ocurrió un problema, intenta nuevamente.");
         setModalOpen(true);
       },
     });
