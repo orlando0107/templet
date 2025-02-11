@@ -11,6 +11,7 @@ import { SignInEmail } from "../common/client/buttonEmail";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Link } from "@radix-ui/themes";
 
 // Esquema de validación con Zod
 const loginSchema = z.object({
@@ -51,35 +52,62 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-4">
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input className="read-only:bg-gray-100 valid:border-blue-500" id="email" type="email" {...register("email")} />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-        </div>
+			<div className="w-full max-w-md mx-auto">
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="w-full max-w-md space-y-4"
+				>
+					<div>
+						<Label htmlFor="email">Email</Label>
+						<Input
+							className="read-only:bg-gray-100 valid:border-blue-500"
+							id="email"
+							type="email"
+							{...register("email")}
+						/>
+						{errors.email && (
+							<p className="text-red-500 text-sm">{errors.email.message}</p>
+						)}
+					</div>
 
-        <div>
-          <Label htmlFor="password">Contraseña</Label>
-          <Input className="read-only:bg-gray-100 valid:border-blue-500" id="password" type="password" {...register("password")} />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-        </div>
+					<div>
+						<Label htmlFor="password">Contraseña</Label>
+						<Input
+							className="read-only:bg-gray-100 valid:border-blue-500"
+							id="password"
+							type="password"
+							{...register("password")}
+						/>
+						{errors.password && (
+							<p className="text-red-500 text-sm">{errors.password.message}</p>
+						)}
+					</div>
 
-        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+					{errorMessage && (
+						<p className="text-red-500 text-sm">{errorMessage}</p>
+					)}
 
-        <SubmitButton text={isSubmitting ? "Ingresando..." : "Ingresar"} />
-      </form>
+					<SubmitButton text={isSubmitting ? "Ingresando..." : "Ingresar"} />
+				</form>
 
-      <div className="flex items-center my-6 justify-center">
-        <span>-----------</span>
-        <span className="mx-4 text-gray-500 text-sm">O inicia sesión con</span>
-        <span>-----------</span>
-      </div>
+				<div className="flex items-center my-6 justify-center">
+					<span>-----------</span>
+					<span className="mx-4 text-gray-500 text-sm">
+						O inicia sesión con
+					</span>
+					<span>-----------</span>
+				</div>
 
-      <div className="flex flex-col gap-3">
-        <SignInGoogle />
-        <SignInEmail />
-      </div>
-    </div>
-  );
+				<div className="flex flex-col gap-3">
+					<SignInGoogle />
+					<SignInEmail />
+				</div>
+				<div className="p-4 m-4 gap-2 justify-center text-center">
+					<Link href="/auth/forgotten-password">¿Olvidaste tu contraseña?</Link>
+					<br />
+					<Link href="/help">Necesitas Ayuda para Ingresar?</Link>
+					<br />
+				</div>
+			</div>
+		);
 };

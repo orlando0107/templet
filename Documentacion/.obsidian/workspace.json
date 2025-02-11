@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "2ecef3c0dfd8cfee",
+        "id": "a353adabb7537079",
         "type": "tabs",
         "children": [
           {
-            "id": "4dd0b50394db58f4",
+            "id": "915511a81b82ebd1",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -165,9 +165,9 @@
       "gemini-assistant:New Gemini chat": false
     }
   },
-  "active": "4dd0b50394db58f4",
+  "active": "915511a81b82ebd1",
   "lastOpenFiles": [
-    "Documentación.md",
-    "Frontend.md"
+    "Frontend.md",
+    "Documentación.md"
   ]
 }

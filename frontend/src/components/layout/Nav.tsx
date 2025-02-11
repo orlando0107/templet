@@ -5,6 +5,7 @@ import React from 'react'
 import MyButtonClient from '../common/client/button';
 import { Flex, Skeleton } from '@radix-ui/themes';
 import { ButtonOut } from '../common/client/buttonOut';
+import MyButtonSever from '../common/servidor/button';
 
 export default function Nav() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,6 +22,7 @@ export default function Nav() {
     if (status === 'authenticated') {
         return (
             <Flex gap={"4"} justify={"center"} align={"center"}>
+                <MyButtonSever href='/dashboard' text='Perfil' variant='surface'/>
                 <ButtonOut />
             </Flex>
         );
