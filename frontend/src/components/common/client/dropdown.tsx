@@ -44,7 +44,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 		<div className="relative inline-block text-left" ref={menuRef}>
 			<button
 				className={clsx(
-					"flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500",
+					"",
 					className,
 				)}
 				onClick={() => setIsOpen(!isOpen)}

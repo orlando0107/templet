@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Dropdown } from "../common/client/dropdown";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import Myavatar from "../common/servidor/avatar";
 
 export function Mymenu() {
 	const { data: session, status } = useSession();
@@ -14,14 +14,14 @@ export function Mymenu() {
 			<Dropdown
 				items={[
 					{ label: "Inicio", href: "/" },
-					{ label: "Dashboard", href: "/dashboard" },
+					{ label: "Mi Perfil", href: "/dashboard" },
 					{
-						label: "Logout",
+						label: "Salir",
 						onClick: () => {
 							if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
 								signOut({
-									redirect: true, // Redirige después de cerrar sesión
-									callbackUrl: "/", // Página a la que redirigir después del cierre
+									redirect: true,
+									callbackUrl: "/",
 								});
 							}
 						},
@@ -29,13 +29,7 @@ export function Mymenu() {
 				]}
 				buttonLabel={
 					<div className="flex items-center gap-2">
-						<Image
-							src={session.user?.image || "/default-avatar.png"}
-							alt="Avatar"
-							className="w-8 h-8 rounded-full"
-							width={32}
-							height={32}
-						/>
+						<Myavatar alt="avatar" nosrc={session.user.name} src={session.user.image}/>
 					</div>
 				}
 			/>
