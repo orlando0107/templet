@@ -7,3 +7,12 @@ export interface RegisterFormData {
 export interface ActivaEmailFormData {
   token:string;
 }
+
+export interface Email {
+  email:string;
+}
+
+export interface ResetPasswordFormData {
+  token: string;
+  password: string;
+}

@@ -24,18 +24,18 @@ export async function POST(req: NextRequest) {
     const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 minutos
 
     await prisma.verificationToken.upsert({
-      where: { identifier: email },
+      where: { identifier_token: { identifier: email, token: hashedToken } },
       update: { token: hashedToken, expires },
       create: { identifier: email, token: hashedToken, expires },
     });
 
-    const resetUrl = `${MyEnvs.NEXTJS}/auth/reset-password?token=${rawToken}`;
+    const resetUrl = `${MyEnvs.NEXTJS}/auth/reset-password/${rawToken}`;
 
     await sendEmail({
       to: email,
       subject: "Restablece tu contraseña",
       html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-             <a href="${resetUrl}">${resetUrl}</a>`,
+            <a href="${resetUrl}">${resetUrl}</a>`,
     });
 
     return NextResponse.json({ message: "Correo de restablecimiento enviado" });

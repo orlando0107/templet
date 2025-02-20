@@ -9,6 +9,9 @@ import { Label } from "@/components/common/client/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Link } from "@radix-ui/themes";
+import { ModalDialog } from "../modals/modalDialog";
+import { useForgoteenPassword } from "@/services/forgoteenPassword";
+
 
 // Esquema de validación con Zod
 const emailSchema = z.object({
@@ -18,6 +21,7 @@ const emailSchema = z.object({
 type EmailFormData = z.infer<typeof emailSchema>;
 
 export const ForgoteenPasswordForm: React.FC = () => {
+	const { mutate: forgoPassword, isPending } = useForgoteenPassword();
 	const {
 		register,
 		handleSubmit,
@@ -29,13 +33,24 @@ export const ForgoteenPasswordForm: React.FC = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const router = useRouter();
 
+	const [modalOpen, setModalOpen] = useState(false);
+	const [modalMessage, setModalMessage] = useState("");
+	const [modalTitle, setModalTitle] = useState("");
+
 	const onSubmit = async (data: EmailFormData) => {
-        console.log(data)
+        forgoPassword(data, {
+			onSuccess: () => {
+				setModalTitle("Correo Enviado con Exito");
+				setModalMessage("Hemos enviado un enlace de verificación a tu correo.");
+				setModalOpen(true);
+			},
+			onError: (error) => {
+				setModalTitle("Error en el registro");
+				setModalMessage((error as Error).message || "Ocurrió un problema, intenta nuevamente.");
+				setModalOpen(true);
+			}
+		})
 		setErrorMessage(null); // Resetear errores previos
-
-
-		// Redirigir al dashboard si el login es exitoso
-		router.push("/dashboard");
 	};
 
 	return (
@@ -71,6 +86,13 @@ export const ForgoteenPasswordForm: React.FC = () => {
 				<br />
 				<Link href="/help">Necesitas Ayuda para Ingresar?</Link>
 			</div>
+			<ModalDialog 
+			isOpen={modalOpen}
+			onClose={() => setModalOpen(false)}
+			title={modalTitle}
+			message={modalMessage}
+			autoClose={30000} // Se cierra en 5 segundos automáticamente
+			/>
 		</div>
 	);
 };
