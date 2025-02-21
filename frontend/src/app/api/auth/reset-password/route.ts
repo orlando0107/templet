@@ -1,53 +1,75 @@
 import { prisma } from "@/db/connection";
 import { type NextRequest, NextResponse } from "next/server";
 import argon2 from "argon2";
+import { MyEnvs } from "@/lib/envs";
 
 export async function POST(req: NextRequest) {
   try {
-    const { token, newPassword } = await req.json();
+    const { token, password, email } = await req.json();
 
-    if (!token || newPassword.length < 6) {
+    if (!token || !email || !password) {
       return NextResponse.json(
-        { message: "Token inválido o contraseña demasiado corta" },
-        { status: 400 }
-      );
+        { message: "Datos Incompletos" },
+        {
+          status: 400,
+        }
+      )
     }
 
-    const verification = await prisma.verificationToken.findFirst({
-      where: { identifier: token },
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if(!user) {
+      return NextResponse.json(
+        {
+          message:"No se encontro el usuario"
+        },
+        {
+          status: 404
+        }
+      )
+    }
+
+
+    const verificationTokens = await prisma.temporaryToken.findFirst({
+      where: { type: "reset_password", userId: user.id, expires: { gte: new Date() } },
+    })
+
+    if(!verificationTokens || !(await argon2.verify(verificationTokens.token, token))) {
+      return NextResponse.json(
+        {
+          message:"Token invalido o expirado"
+        },
+        {
+          status: 400
+        }
+      )
+    }
+
+
+    const hashedPassword = await argon2.hash(password,{
+      secret: Buffer.from(MyEnvs.SECRET_PASSWORD),
     });
 
-    if (!verification || verification.expires < new Date()) {
-      return NextResponse.json(
-        { message: "Token inválido o expirado" },
-        { status: 400 }
-      );
-    }
-
-    // Verificar el token
-    const isValid = await argon2.verify(verification.token, token);
-    if (!isValid) {
-      return NextResponse.json({ message: "Token inválido" }, { status: 400 });
-    }
-
-    // Hashear la nueva contraseña
-    const hashedPassword = await argon2.hash(newPassword);
-
-    // Actualizar la contraseña
     await prisma.user.update({
-      where: { email: verification.identifier },
+      where: { email: email },
       data: { password: hashedPassword },
     });
 
-    // Eliminar el token
-    await prisma.verificationToken.delete({ where: { id: verification.id } });
+    await prisma.temporaryToken.delete({
+      where: { id: verificationTokens.id },
+    });
+
 
     return NextResponse.json({
       message: "Contraseña restablecida correctamente",
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error("Password reset error:", error);
     return NextResponse.json(
-      { message: "Error al restablecer contraseña" },
+      { message: "Error al restablecer contraseña"},
       { status: 500 }
     );
   }

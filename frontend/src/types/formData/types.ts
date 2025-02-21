@@ -14,5 +14,6 @@ export interface Email {
 
 export interface ResetPasswordFormData {
   token: string;
+  email: string;
   password: string;
 }

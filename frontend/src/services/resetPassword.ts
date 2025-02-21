@@ -6,7 +6,7 @@ export function useResetPassword() {
   return usePostRequest<ResetPasswordFormData, GenericoResponse<unknown>>({
     url: "/api/auth/reset-password",
     onSuccess: (data) => {
-      console.log("Contraseña restablecida:", data);
+      console.log("Contraseña restablecida:", data.message);
     },
     onError: (error) => {
       console.log("Error al restablecer la contraseña:", error);

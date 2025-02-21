@@ -1,5 +1,6 @@
 import { prisma } from "@/db/connection";
 import { type NextRequest, NextResponse } from "next/server";
+// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
 import crypto from "crypto";
 import argon2 from "argon2";
 import { sendEmail } from "@/lib/mailer";
@@ -18,27 +19,55 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generar y almacenar el token de restablecimiento
+    await prisma.temporaryToken.deleteMany({ where: { userId: user.id,
+      type:"reset_password",
+      expires: {
+        lt: new Date(),
+      }
+    } });
+
+    // 
+    const existingToken = await prisma.temporaryToken.findFirst({
+      where:{
+        userId: user.id,
+        type: "reset_password",
+        expires: {
+          gt: new Date(),
+        }
+      }
+    })
+
+    if(existingToken){
+      return NextResponse.json(
+        {message: "Ya se ha enviado un enlace de restablecimeinto , Revisa tu Correo"},
+        {status: 200}
+      );
+    }
+    //
     const rawToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = await argon2.hash(rawToken);
-    const expires = new Date(Date.now() + 1000 * 60 * 30); // 30 minutos
+    const expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
-    await prisma.verificationToken.upsert({
-      where: { identifier_token: { identifier: email, token: hashedToken } },
-      update: { token: hashedToken, expires },
-      create: { identifier: email, token: hashedToken, expires },
+    await prisma.temporaryToken.create({
+      data: {
+        type: "reset_password",
+        userId: user.id,
+        expires,
+        token: hashedToken,
+      },
     });
 
-    const resetUrl = `${MyEnvs.NEXTJS}/auth/reset-password/${rawToken}`;
+    const resetUrl = `${MyEnvs.NEXTJS}/auth/reset-password/${rawToken}`
 
     await sendEmail({
       to: email,
-      subject: "Restablece tu contraseña",
+      subject: "Restablecimiento de contraseña",
       html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-            <a href="${resetUrl}">${resetUrl}</a>`,
+                  <a href="${resetUrl}">${resetUrl}</a>`
     });
 
-    return NextResponse.json({ message: "Correo de restablecimiento enviado" });
+    return NextResponse.json({ message: "Correo enviado correctamente" });
+
   } catch (error) {
     return NextResponse.json(
       { message: "Error al enviar el correo de restablecimiento" },
