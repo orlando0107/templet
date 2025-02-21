@@ -30,5 +30,11 @@ export default function PrivateHeader() {
 			</Flex>
 		);
 	}
-	return null;
+
+	if (status === "unauthenticated") {}
+	return (
+		<div>
+			<Skeleton>Loading</Skeleton>
+		</div>
+	)
 }
