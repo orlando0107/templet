@@ -12,6 +12,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Link } from "@radix-ui/themes";
+import { ModalDialog } from "../modals/modalDialog";
 
 // Esquema de validación con Zod
 const loginSchema = z.object({
@@ -31,6 +32,9 @@ export const LoginForm: React.FC = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
@@ -43,6 +47,23 @@ export const LoginForm: React.FC = () => {
     });
 
     if (result?.error) {
+      // Lógica para mostrar mensajes de bloqueo en modal
+      if (result.error.includes("bloqueada por 24 horas")) {
+        setModalTitle("Cuenta bloqueada por seguridad");
+        setModalMessage(
+          "Tu cuenta ha sido bloqueada por 24 horas debido a múltiples intentos fallidos. Por favor, contacta a soporte técnico: soporte@tudominio.com"
+        );
+        setModalOpen(true);
+        return;
+      }
+      if (result.error.includes("bloqueada por múltiples intentos")) {
+        setModalTitle("Cuenta temporalmente bloqueada");
+        setModalMessage(
+          "Has superado el número máximo de intentos fallidos. Intenta de nuevo en 15 minutos. Si el problema persiste, contacta a soporte técnico."
+        );
+        setModalOpen(true);
+        return;
+      }
       setErrorMessage("Credenciales incorrectas o cuenta no verificada.");
       return;
     }
@@ -108,6 +129,13 @@ export const LoginForm: React.FC = () => {
 					<Link href="/help">Necesitas Ayuda para Ingresar?</Link>
 					<br />
 				</div>
+				<ModalDialog
+					isOpen={modalOpen}
+					onClose={() => setModalOpen(false)}
+					title={modalTitle}
+					message={modalMessage}
+					autoClose={60000} // Se cierra en 1 minuto automáticamente
+				/>
 			</div>
 		);
 };

@@ -17,3 +17,36 @@ export interface ResetPasswordFormData {
   email: string;
   password: string;
 }
+
+export interface PasswordFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  token?: string;
+}
+
+export interface BiographyFormData {
+  content: string;
+  title?: string;
+  isPublic?: boolean;
+}
+
+export interface Biography {
+  id: string;
+  userId: string;
+  content: string;
+  title?: string;
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+
+export interface BiographyWithUser extends Biography {
+  user: {
+    id: string;
+    name: string | null;
+    email: string;
+    image: string | null;
+  };
+}

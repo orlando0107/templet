@@ -1,5 +1,19 @@
 # MyTemple
 
+> **¿Quieres usar este template en tu propio proyecto?**
+>
+> 1. Clona este repositorio o descárgalo como ZIP.
+> 2. Copia la carpeta `frontend` a tu nuevo proyecto (o renómbrala si lo deseas).
+> 3. Instala las dependencias con `pnpm install`.
+> 4. Configura tu archivo `.env` con tus propias claves y URLs.
+> 5. Personaliza imágenes, colores y textos según tu marca.
+> 6. Ejecuta las migraciones de Prisma (`pnpm prisma migrate dev`).
+> 7. Inicia el servidor de desarrollo (`pnpm dev`).
+> 8. Adapta los servicios en `src/services/` si necesitas consumir otro backend.
+> 9. ¡Listo! Ya puedes empezar a desarrollar sobre este template.
+
+---
+
 Proyecto de Frontend - Next.js 15 + TailwindCSS 4 + Prisma
 
 Este proyecto es un template reutilizable para evitar escribir el mismo código constantemente al iniciar nuevos proyectos. Usa Next.js 15, TailwindCSS 4 y Prisma con PostgreSQL para crear aplicaciones web modernas y escalables.
@@ -226,6 +240,20 @@ Comparado con useEffect + fetch: TanStack Query maneja automáticamente la cach�
 
 Comparado con Redux o Zustand: TanStack Query está específicamente diseñado para manejar datos asíncronos, mientras que Redux y Zustand son más adecuados para el estado global de la aplicación.
 
+### Comparativa: Next.js fetch/cache vs TanStack Query
+
+| Caso de uso                        | Next.js fetch/cache | TanStack Query |
+|-------------------------------------|:------------------:|:--------------:|
+| SSR/SSG puro (Server Components)    |        ✅          |       ❌       |
+| Interactividad en cliente           |        ❌          |       ✅       |
+| Estado de carga/error en cliente    |        ❌          |       ✅       |
+| Mutaciones y refetch automático     |        ❌          |       ✅       |
+| Sincronización entre pestañas       |        ❌          |       ✅       |
+
+**¿Cuándo usar cada uno?**
+- Usa **Next.js fetch/cache** para páginas estáticas, Server Components y SSR/SSG puro.
+- Usa **TanStack Query** para dashboards, formularios, edición en tiempo real y cualquier componente interactivo en el cliente.
+
 ## Instalación
 
 Clona este repositorio:
@@ -243,3 +271,37 @@ turbo dev
 o
 bun dev
 ```
+
+---
+
+## 🧰 ¿Para qué sirve cada herramienta?
+
+- **Next.js:** Framework React para SSR, SSG, rutas y API.
+- **TailwindCSS:** Framework de utilidades CSS para estilos rápidos y personalizables.
+- **Prisma:** ORM para manejar la base de datos de forma tipada y segura.
+- **NextAuth:** Autenticación con múltiples proveedores (Google, email, credenciales).
+- **TanStack Query:** Manejo eficiente de datos asíncronos y caché en React.
+- **Radix UI:** Componentes accesibles y personalizables para UI.
+- **Zod:** Validación de datos y formularios con TypeScript.
+- **Biome:** Herramienta moderna para linting y formateo de código (reemplaza ESLint y Prettier, es muy rápida y fácil de usar).
+- **ESLint:** Linter para mantener calidad de código (reglas adicionales).
+- **Turbo:** Herramienta para monorepos y builds rápidos.
+- **Husky:** Git hooks para asegurar calidad antes de commits (ejecuta tests, lint, etc.).
+- **Zustand:** Manejo de estado global en React.
+- **argon2/bcrypt:** Hashing seguro de contraseñas.
+- **nodemailer:** Envío de emails (verificación, recuperación, alertas).
+
+---
+
+## ℹ️ ¿Qué es Biome y cómo funciona?
+
+- **Biome** es una herramienta moderna que reemplaza a ESLint y Prettier.
+- Sirve para:
+  - **Formatear** el código automáticamente (`pnpm biome format`).
+  - **Detectar errores y malas prácticas** (`pnpm biome check` o `pnpm biome lint`).
+  - Es muy rápida y fácil de configurar.
+- **¿Por qué usarla?**
+  - Menos dependencias, más velocidad, configuración simple.
+  - Puedes usarla junto a ESLint si quieres reglas extra.
+
+---

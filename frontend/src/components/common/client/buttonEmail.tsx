@@ -10,9 +10,11 @@ export function SignInEmail() {
   const [email, setEmail] = useState("");
 
   const handleSignIn = async () => {
-    const result = await signIn("nodemailer", { email });
+    const result = await signIn("nodemailer", { email, redirect: false });
 
-    if (result?.error) {
+    // Since signIn returns undefined or an object with 'error' and 'ok' properties,
+    // we can safely check for 'error' property.
+    if (result && typeof result === "object" && "error" in result && result.error) {
       console.error("Error al iniciar sesión:", result.error);
     } else {
       console.log("Correo enviado, revisa tu bandeja de entrada.");

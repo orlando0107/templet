@@ -6,7 +6,6 @@ import { z } from "zod";
 import { SubmitButton } from "@/components/common/client/SumitButton";
 import { Label } from "@/components/common/client/label";
 import { useState } from "react";
-import { Link } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { ModalDialog } from "../modals/modalDialog";
 import { useResetPassword } from "@/services/resetPassword";
@@ -45,7 +44,7 @@ export const ResetPasswordForm = ({token}: Props) => {
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const router = useRouter();
-    const [successMessage, setSuccessMessage] = useState<string| null>(null);
+    const [successMessage] = useState<string| null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [modalTitle, setModalTitle] = useState("");
@@ -62,7 +61,7 @@ export const ResetPasswordForm = ({token}: Props) => {
             password: data.password
         }
         resetPasswordMutate(dataS, {
-            onSuccess: (response) => {
+            onSuccess: () => {
                 setModalTitle("Contraseña Restablecida con Exito");
                 setModalMessage("Tu contraseña ha sido restablecida con éxito.");
                 setModalOpen(true);

@@ -19,6 +19,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validar antes de buscar tokens existentes
+    if (!user.password) {
+      return NextResponse.json(
+        { message: "Tu cuenta no tiene contraseña establecida. Si deseas agregar una contraseña, hazlo desde tu perfil." },
+        { status: 400 }
+      );
+    }
+
     await prisma.temporaryToken.deleteMany({ where: { userId: user.id,
       type:"reset_password",
       expires: {
@@ -26,7 +34,7 @@ export async function POST(req: NextRequest) {
       }
     } });
 
-    // 
+    // Buscar token existente solo si el usuario tiene contraseña
     const existingToken = await prisma.temporaryToken.findFirst({
       where:{
         userId: user.id,
@@ -69,6 +77,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Correo enviado correctamente" });
 
   } catch (error) {
+    console.error("Error al enviar el correo de restablecimiento:", error);
     return NextResponse.json(
       { message: "Error al enviar el correo de restablecimiento" },
       { status: 500 }

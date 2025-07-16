@@ -25,6 +25,7 @@ model User {
   deviceLogins    DeviceLogin[]
   failedAttempts  FailedAttempt[]
   securityEvents  SecurityEvent[]
+  biography     Biography?
 }
 
 model Account {
@@ -109,6 +110,18 @@ model SecurityEvent {
   ipAddress   String?
   userAgent   String?
   createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Biography {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  content     String   @db.Text
+  title       String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

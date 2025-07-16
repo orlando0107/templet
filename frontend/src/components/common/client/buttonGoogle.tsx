@@ -10,7 +10,7 @@ export default function SignInGoogle() {
         <div className="flex flex-col justify-center items-center">
             <Button
                 variant="soft"
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                 type="button"
                 className="w-full text-black hover:bg-[#dedddd]/90 focus:ring-4 focus:outline-none focus:ring-[#dedddd]/50 font-medium rounded-lg text-sm sm:text-base px-4 py-2 sm:py-3 flex items-center justify-center space-x-2"
             >

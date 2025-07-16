@@ -7,7 +7,6 @@ import { Input } from "@/components/common/client/input";
 import { SubmitButton } from "@/components/common/client/SumitButton";
 import { Label } from "@/components/common/client/label";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Link } from "@radix-ui/themes";
 import { ModalDialog } from "../modals/modalDialog";
 import { useForgoteenPassword } from "@/services/forgoteenPassword";
@@ -21,7 +20,7 @@ const emailSchema = z.object({
 type EmailFormData = z.infer<typeof emailSchema>;
 
 export const ForgoteenPasswordForm: React.FC = () => {
-	const { mutate: forgoPassword, isPending } = useForgoteenPassword();
+	const { mutate: forgoPassword } = useForgoteenPassword();
 	const {
 		register,
 		handleSubmit,
@@ -31,7 +30,6 @@ export const ForgoteenPasswordForm: React.FC = () => {
 	});
 
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const router = useRouter();
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [modalMessage, setModalMessage] = useState("");

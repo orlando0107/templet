@@ -18,6 +18,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: authProviders,
 
   callbacks: {
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/protected`;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -37,6 +40,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
+  events: {
+    async createUser({ user }) {
+      // Crea la biografía vacía si no existe
+      await prisma.biography.create({
+        data: {
+          user: { connect: { id: user.id } },
+          content: "",
+          title: "",
+          isPublic: false,
+        },
+      });
+    },
+  },
 
   session: {
     strategy: "jwt",
@@ -48,5 +64,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/error",
   },
 
-  secret: process.env.NEXTAUTH_SECRET as string,
+  secret: process.env.AUTH_SECRET as string,
 });

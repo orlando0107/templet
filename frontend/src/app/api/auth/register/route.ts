@@ -47,6 +47,14 @@ export async function POST(req: NextRequest) {
             provider:"credentials",
             providerAccountId: parsedData.email,
           }
+        },
+        // Crear biografía vacía al registrar
+        biography: {
+          create: {
+            content: "",
+            title: "",
+            isPublic: false,
+          }
         }
       },
     });

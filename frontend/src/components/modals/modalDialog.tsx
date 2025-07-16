@@ -14,6 +14,13 @@ type ModalDialogProps = {
     hideCloseButton?: boolean; // Opción para ocultar el botón de cierre
     className?: string; // Clases de Tailwind para personalización
     children?: React.ReactNode; // Contenido personalizado en lugar de "message"
+    // Nuevas props para confirmación
+    showCancelButton?: boolean;
+    onConfirm?: () => void;
+    confirmText?: string;
+    cancelText?: string;
+    confirmButtonClassName?: string;
+    cancelButtonClassName?: string;
 };
 
 export const ModalDialog: React.FC<ModalDialogProps> = ({
@@ -26,6 +33,12 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({
     hideCloseButton = false,
     className = "",
     children,
+    showCancelButton = false,
+    onConfirm,
+    confirmText = "Confirmar",
+    cancelText = "Cancelar",
+    confirmButtonClassName = "bg-blue-500 hover:bg-blue-600",
+    cancelButtonClassName = "bg-gray-300 hover:bg-gray-400",
 }) => {
     // Si autoClose está definido, cierra el modal después del tiempo especificado
     useEffect(() => {
@@ -35,6 +48,11 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({
         }
     }, [isOpen, autoClose, onClose]);
 
+    const handleConfirm = () => {
+        onConfirm?.();
+        onClose();
+    };
+
     return (
         <Dialog open={isOpen} onClose={onClose} className="relative z-50">
             <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/30">
@@ -42,12 +60,20 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({
                     {title && <DialogTitle className="text-lg font-bold">{title}</DialogTitle>}
                     <div className="mt-2 text-gray-600">{children || message}</div>
                     {!hideCloseButton && (
-                        <div className="mt-4 flex justify-end">
+                        <div className="mt-4 flex justify-end gap-2">
+                            {showCancelButton && (
+                                <Button
+                                    onClick={onClose}
+                                    className={`text-gray-700 px-4 py-2 rounded-md transition ${cancelButtonClassName}`}
+                                >
+                                    {cancelText}
+                                </Button>
+                            )}
                             <Button
-                                onClick={onClose}
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                                onClick={showCancelButton ? handleConfirm : onClose}
+                                className={`text-white px-4 py-2 rounded-md transition ${showCancelButton ? confirmButtonClassName : "bg-blue-500 hover:bg-blue-600"}`}
                             >
-                                {buttonText}
+                                {showCancelButton ? confirmText : buttonText}
                             </Button>
                         </div>
                     )}

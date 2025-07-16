@@ -1,1 +1,31 @@
-.hintrc
+# Entorno y secretos
+.env
+
+# Prisma
+prisma/migrations/**/migration.sql
+prisma/dev.db
+
+# Node y Next.js
+/node_modules
+/.next
+/out
+/build
+/.turbo
+.pnpm-debug.log*
+pnpm-lock.yaml
+
+# IDEs y editores
+.vscode/
+.idea/
+.history/
+
+# Sistema
+.DS_Store
+*.log
+*.tsbuildinfo
+
+# Vercel y Docker (opcional)
+.vercel/
+frontend/prisma/migrations/20250714175542_one/migration.sql
+frontend/.env.local
+frontend/prisma/migrations/20250714224802_add_biography_model/migration.sql
